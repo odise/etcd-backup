@@ -9,7 +9,7 @@ import (
 )
 
 type Config struct {
-	ConcurrentRequests int             `json:"ConcurrentRequests,omitempty"`
+	ConcurrentRequests int             `json:"concurrentRequests,omitempty"`
 	Retries            int             `json:"retries,omitempty"`
 	EtcdConfigPath     string          `json:"etcdConfigPath,omitempty"`
 	DumpFilePath       string          `json:"dumpFilePath,omitempty"`

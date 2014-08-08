@@ -1,5 +1,5 @@
 {
-  "ConcurrentRequests": 50,
+  "concurrentRequests": 50,
   "retries": 5,
   "etcdConfigPath": "fixtures/etcd-dump.json",
   "dumpFilePath": "dump.json",
