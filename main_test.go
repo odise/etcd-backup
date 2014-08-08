@@ -29,10 +29,10 @@ func (c *MockedEtcdClient) SetDir(key string, ttl uint64) (*etcd.Response, error
 func init() {
 	config = &Config{
 		ConcurrentRequests: 1,
-		Retries:          1,
-		EtcdConfigPath:   "none",
-		DumpFilePath:     "fixtures/etcd-dump.json",
-		BackupStrategy:   &BackupStrategy{[]string{"/"}, true, true},
+		Retries:            1,
+		EtcdConfigPath:     "none",
+		DumpFilePath:       "fixtures/etcd-dump.json",
+		BackupStrategy:     &BackupStrategy{[]string{"/"}, true, true},
 	}
 
 	failures = 0

@@ -63,10 +63,10 @@ func parseCommandLineOptions() (*string, *Config) {
 	flag.Parse()
 	return configPath, &Config{
 		ConcurrentRequests: *ConcurrentRequests,
-		Retries:          *retries,
-		EtcdConfigPath:   *etcdConfigPath,
-		DumpFilePath:     *dumpFilePath,
-		BackupStrategy:   backupStrategy,
+		Retries:            *retries,
+		EtcdConfigPath:     *etcdConfigPath,
+		DumpFilePath:       *dumpFilePath,
+		BackupStrategy:     backupStrategy,
 	}
 }
 

@@ -30,10 +30,10 @@ func TestConfigNilValueOverride(t *testing.T) {
 
 	otherConfig := &Config{
 		ConcurrentRequests: 2,
-		Retries:          2,
-		EtcdConfigPath:   "none",
-		DumpFilePath:     "none",
-		BackupStrategy:   &BackupStrategy{[]string{"/"}, false, false},
+		Retries:            2,
+		EtcdConfigPath:     "none",
+		DumpFilePath:       "none",
+		BackupStrategy:     &BackupStrategy{[]string{"/"}, false, false},
 	}
 	configNilValueOverride(otherConfig, config)
 	configCompare(t, *otherConfig, *config, false)

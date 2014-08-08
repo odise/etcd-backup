@@ -1,0 +1,17 @@
+{
+  "cluster": {
+    "leader": "http://my-leader.com:4001/",
+    "machines": [
+      "http://my-follower1.com:4001/",
+      "http://my-follower2.com:4001/",
+      "http://my-follower3.com:4001/"
+    ]
+  },
+  "config": {
+    "certFile": "",
+    "keyFile": "",
+    "caCertFiles": [],
+    "timeout": 10000000000000,
+    "consistency": "STRONG"
+  }
+}
