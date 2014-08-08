@@ -9,10 +9,10 @@ import (
 func TestConfigToString(t *testing.T) {
 	newConfig := Config{}
 	str := newConfig.ToString()
-	expectedStr := "ConcurentRequest: 0, Retries: 0, EtcdConfigPath: , DumpFilePath: , BackupStrategy: (*main.BackupStrategy)(nil)"
+	expectedStr := "ConcurrentRequests: 0, Retries: 0, EtcdConfigPath: , DumpFilePath: , BackupStrategy: (*main.BackupStrategy)(nil)"
 	stringCompare(t, str, expectedStr)
 
-	OtherExpectedStr := "ConcurentRequest: 1, Retries: 1, EtcdConfigPath: none, DumpFilePath: fixtures/etcd-dump.json, "
+	OtherExpectedStr := "ConcurrentRequests: 1, Retries: 1, EtcdConfigPath: none, DumpFilePath: fixtures/etcd-dump.json, "
 	OtherExpectedStr += "BackupStrategy: &main.BackupStrategy{Keys:[]string{\"/\"}, Sorted:true, Recursive:true}"
 	stringCompare(t, config.ToString(), OtherExpectedStr)
 }
@@ -29,7 +29,7 @@ func TestConfigNilValueOverride(t *testing.T) {
 	configCompare(t, *newConfig, *config, true)
 
 	otherConfig := &Config{
-		ConcurentRequest: 2,
+		ConcurrentRequests: 2,
 		Retries:          2,
 		EtcdConfigPath:   "none",
 		DumpFilePath:     "none",
@@ -82,7 +82,7 @@ func loadValidConfigFile(t *testing.T) {
 	name := "fixtures/backup-configuration.json"
 	newConfig := loadConfigFile(&name)
 	backupStrategy := BackupStrategy{Keys: []string{"/keys/all"}, Sorted: false, Recursive: false}
-	expectedConfig := Config{ConcurentRequest: 150, Retries: 5, EtcdConfigPath: "fixtures/etcd-dump.json", DumpFilePath: "dump.json", BackupStrategy: &backupStrategy}
+	expectedConfig := Config{ConcurrentRequests: 50, Retries: 5, EtcdConfigPath: "fixtures/etcd-dump.json", DumpFilePath: "dump.json", BackupStrategy: &backupStrategy}
 
 	if failures != 0 {
 		t.Fatal("No failure raised when config file is bads.")

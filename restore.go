@@ -30,7 +30,7 @@ func LoadDataSet(dumpFilePath string) *[]BackupKey {
 
 func RestoreDataSet(backupKeys []BackupKey, config *Config, etcdClient EtcdClient) {
 	statistics := NewRestoreStatistics(backupKeys)
-	throttle := make(chan int, config.ConcurentRequest)
+	throttle := make(chan int, config.ConcurrentRequests)
 
 	var wg sync.WaitGroup
 	wg.Add(len(backupKeys))

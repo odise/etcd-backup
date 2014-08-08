@@ -9,13 +9,13 @@ import (
 )
 
 type Config struct {
-	ConcurentRequest int             `json:"concurentRequest,omitempty"`
-	Retries          int             `json:"retries,omitempty"`
-	EtcdConfigPath   string          `json:"etcdConfigPath,omitempty"`
-	DumpFilePath     string          `json:"dumpFilePath,omitempty"`
-	BackupStrategy   *BackupStrategy `json:"backupStrategy,omitempty"`
-	LogFatal         func(v ...interface{})
-	LogPrintln       func(v ...interface{})
+	ConcurrentRequests int             `json:"ConcurrentRequests,omitempty"`
+	Retries            int             `json:"retries,omitempty"`
+	EtcdConfigPath     string          `json:"etcdConfigPath,omitempty"`
+	DumpFilePath       string          `json:"dumpFilePath,omitempty"`
+	BackupStrategy     *BackupStrategy `json:"backupStrategy,omitempty"`
+	LogFatal           func(v ...interface{})
+	LogPrintln         func(v ...interface{})
 }
 
 type BackupStrategy struct {
@@ -25,7 +25,7 @@ type BackupStrategy struct {
 }
 
 func (config *Config) ToString() string {
-	stringVersion := "ConcurentRequest: " + fmt.Sprintf("%#v", config.ConcurentRequest)
+	stringVersion := "ConcurrentRequests: " + fmt.Sprintf("%#v", config.ConcurrentRequests)
 	stringVersion += ", Retries: " + fmt.Sprintf("%#v", config.Retries)
 	stringVersion += ", EtcdConfigPath: " + config.EtcdConfigPath
 	stringVersion += ", DumpFilePath: " + config.DumpFilePath
@@ -54,15 +54,15 @@ func LoadConfig(configPath *string, commandLineConfig *Config) *Config {
 
 func parseCommandLineOptions() (*string, *Config) {
 	configPath := flag.String("config", "backup-configuration.json", "Location of the backup configuration file")
-	concurentRequest := flag.Int("concurent-request", 10, "Maximum limit of goroutines talking to etcd at a time")
+	ConcurrentRequests := flag.Int("concurrent-requests", 10, "Maximum limit of goroutines talking to etcd at a time")
 	retries := flag.Int("retries", 5, "Number of retries before the program give up on failing request")
 	etcdConfigPath := flag.String("etcd-config", "etcd-configuration.json", "Location of the etcd config file")
-	dumpFilePath := flag.String("dump", "etcd-dump.json", "Location of the etcd dump file")
+	dumpFilePath := flag.String("file", "etcd-dump.json", "Location of the etcd dump file")
 	backupStrategy := &BackupStrategy{[]string{"/"}, true, true}
 
 	flag.Parse()
 	return configPath, &Config{
-		ConcurentRequest: *concurentRequest,
+		ConcurrentRequests: *ConcurrentRequests,
 		Retries:          *retries,
 		EtcdConfigPath:   *etcdConfigPath,
 		DumpFilePath:     *dumpFilePath,
@@ -90,12 +90,12 @@ func loadConfigFile(configPath *string) *Config {
 
 func configNilValueOverride(currentConfig *Config, defaultValue *Config) {
 
-	if currentConfig.ConcurentRequest == 0 {
-		currentConfig.ConcurentRequest = defaultValue.ConcurentRequest
+	if currentConfig.ConcurrentRequests == 0 {
+		currentConfig.ConcurrentRequests = defaultValue.ConcurrentRequests
 	}
 
-	if currentConfig.ConcurentRequest == 0 {
-		currentConfig.ConcurentRequest = defaultValue.ConcurentRequest
+	if currentConfig.ConcurrentRequests == 0 {
+		currentConfig.ConcurrentRequests = defaultValue.ConcurrentRequests
 	}
 
 	if currentConfig.Retries == 0 {
