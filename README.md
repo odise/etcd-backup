@@ -31,7 +31,7 @@ The backup strategy can be overwritten in the etcd-backup configuration file. Se
 
   `-config` Mandatory etcd-backup configuration file location, default value: "_backup-configuration.json_". See [Configuration section](#config) for more information.<br/>
   `-retries` Number of retries that will be executed if the request fails, default value is 5.<br/>
-  `-etcd-config` Mandatory etcd configuration file location, default value: "_etcd-configuration.json_". See fixtures folder for an example. **????????????????** <br/>
+  `-etcd-config` etcd client configuration file location, default value: "_etcd-configuration.json_". See fixtures folder for an example. **????????????????** <br/>
   `-file` Location of the dump file data will be stored in, default value: "_etcd-dump.json_".<br/>
 
 
@@ -74,7 +74,7 @@ Restore the keys from the `etcd-dump.json` file.
   `-config` Mandatory etcd-backup configuration file location, default value: "_backup-configuration.json_". See [Configuration section](#config) for more information.<br/>
   `-concurrent-requests` Number of concurrent requests that will be executed during the restore (restore mode only), default value is 10.<br/>
   `-retries` Number of retries that will be executed if the request fails, default value is 5.<br/>
-  `-etcd-config` Mandatory etcd configuration file location, default value: "_etcd-configuration.json_". See fixtures folder for an example. **????????????????** <br/>
+  `-etcd-config` etcd client configuration file location, default value: "_etcd-configuration.json_". See fixtures folder for an example. **????????????????** <br/>
   `-file` Location of the dump file data will be loaded from, default value: "_etcd-dump.json_".<br/>
 
     $ etcd-dump -config=myBackupConfig.json -retries=2 -etcd-config=myClusterConfig.json -file=dataset.json -concurrent-requests=100 restore
