@@ -33,7 +33,7 @@ func (bacupKey *BackupKey) IsDirectory() (isDirectory bool) {
 func (bacupKey *BackupKey) IsExpired() (isExpired bool) {
 	if bacupKey.Expiration != nil {
 		bacupKey.TTL = int64(bacupKey.Expiration.Sub(time.Now().UTC()))
-		isExpired = bacupKey.TTL > 0
+		isExpired = bacupKey.TTL <= 0
 	}
 
 	return isExpired
@@ -73,7 +73,7 @@ func SingleNodeToBackupKey(node *etcd.Node) *BackupKey {
 		Expiration: node.Expiration,
 	}
 
-	if node.Dir != true {
+	if node.Dir != true && node.Key != "" {
 		key.Value = &node.Value
 	}
 
@@ -88,7 +88,10 @@ func NodesToBackupKeys(node *etcd.Node) []*BackupKey {
 			backupKeys = append(backupKeys, NodesToBackupKeys(nodeChild)...)
 		}
 	} else {
-		backupKeys = append(backupKeys, SingleNodeToBackupKey(node))
+		backupKey := SingleNodeToBackupKey(node)
+		if backupKey.Key != "" {
+			backupKeys = append(backupKeys, backupKey)
+		}
 	}
 
 	return backupKeys
