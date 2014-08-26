@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/coreos/go-etcd/etcd"
@@ -37,6 +38,17 @@ func (bacupKey *BackupKey) IsExpired() (isExpired bool) {
 	}
 
 	return isExpired
+}
+
+func (bacupKey *BackupKey) MatchBackupStrategy(backupStrategy *BackupStrategy) (match bool) {
+	for _, key := range backupStrategy.Keys {
+		if (backupStrategy.Recursive == true && strings.HasPrefix(bacupKey.Key, key)) || bacupKey.Key == key {
+			match = true
+			break
+		}
+	}
+
+	return match
 }
 
 func DownloadDataSet(backupStrategy *BackupStrategy, etcdClient EtcdClient) []*BackupKey {

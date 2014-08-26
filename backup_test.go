@@ -34,6 +34,32 @@ func TestIsExpired(t *testing.T) {
 	}
 }
 
+func TestMatchBackupStrategy(t *testing.T) {
+	key1 := BackupKey{Key: "/tests"}
+	key2 := BackupKey{Key: "/tests/1"}
+	key3 := BackupKey{Key: "/"}
+	backupStrategy1 := &BackupStrategy{Keys: []string{"/"}, Recursive: false}
+	backupStrategy2 := &BackupStrategy{Keys: []string{"/test"}, Recursive: false}
+	backupStrategy3 := &BackupStrategy{Keys: []string{"/"}, Recursive: true}
+	backupStrategy4 := &BackupStrategy{Keys: []string{"/none", "/tests"}, Recursive: true}
+
+	evalStrategy(t, backupStrategy1, []bool{false, false, true}, key1, key2, key3)
+	evalStrategy(t, backupStrategy2, []bool{false, false, false}, key1, key2, key3)
+	evalStrategy(t, backupStrategy3, []bool{true, true, true}, key1, key2, key3)
+	evalStrategy(t, backupStrategy4, []bool{true, true, false}, key1, key2, key3)
+}
+
+func evalStrategy(t *testing.T, backupStrategy *BackupStrategy, expectedResult []bool, keys ...BackupKey) {
+	result := make([]bool, len(keys))
+	for i, key := range keys {
+		result[i] = key.MatchBackupStrategy(backupStrategy)
+	}
+
+	if reflect.DeepEqual(result, expectedResult) != true {
+		t.Fatal("Unexpected result for backupStrategy:", fmt.Sprintf("%#v", backupStrategy), "expected:", expectedResult, ".Got: ", result)
+	}
+}
+
 func TestDownloadDataSet(t *testing.T) {
 	emptySet := mockEmptyDataSet(t, BackupStrategy{})
 	if len(emptySet) > 0 {

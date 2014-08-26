@@ -33,12 +33,10 @@ func RestoreDataSet(backupKeys []BackupKey, config *Config, etcdClient EtcdClien
 	throttle := make(chan int, config.ConcurrentRequests)
 
 	var wg sync.WaitGroup
-	wg.Add(len(backupKeys))
 
 	for index := range backupKeys {
 		backupKey := backupKeys[index]
-		throttle <- 1
-		go RestoreKey(&backupKey, statistics, &wg, throttle, etcdClient)
+		RestoreKeyWithThrottle(&backupKey, statistics, &wg, throttle, etcdClient)
 	}
 
 	wg.Wait()
@@ -64,23 +62,32 @@ func printStatistics(statistics map[string]*int32) {
 	}
 }
 
+func RestoreKeyWithThrottle(backupKey *BackupKey, statistics map[string]*int32, wg *sync.WaitGroup, throttle chan int, etcdClient EtcdClient) {
+	if backupKey.MatchBackupStrategy(config.BackupStrategy) {
+		wg.Add(1)
+		throttle <- 1
+		go RestoreKey(backupKey, statistics, wg, throttle, etcdClient)
+	}
+}
+
 func RestoreKey(backupKey *BackupKey, statistics map[string]*int32, wg *sync.WaitGroup, throttle chan int, etcdClient EtcdClient) {
 	defer wg.Done()
 
 	if !backupKey.IsExpired() {
 		if backupKey.IsDirectory() {
-			RestoreKeyWithRetries(setDirectory, 0, backupKey, etcdClient)
+			restoreKeyWithRetries(setDirectory, 0, backupKey, etcdClient)
 			atomic.AddInt32(statistics["EmptyDirectories"], 1)
 		} else {
-			RestoreKeyWithRetries(setKey, 0, backupKey, etcdClient)
-			atomic.AddInt32(statistics["KeysInserted"], 1)
+			restoreKeyWithRetries(setKey, 0, backupKey, etcdClient)
 		}
+
+		atomic.AddInt32(statistics["KeysInserted"], 1)
 	}
 
 	<-throttle
 }
 
-func RestoreKeyWithRetries(
+func restoreKeyWithRetries(
 	request func(*BackupKey, EtcdClient) (*etcd.Response, error),
 	retries int, backupKey *BackupKey, etcdClient EtcdClient,
 ) {
@@ -91,7 +98,7 @@ func RestoreKeyWithRetries(
 		} else {
 			retries += 1
 			time.Sleep(time.Duration(retries * 1000))
-			RestoreKeyWithRetries(request, retries, backupKey, etcdClient)
+			restoreKeyWithRetries(request, retries, backupKey, etcdClient)
 		}
 	}
 }

@@ -69,6 +69,28 @@ Dumped keys are stored in an array of keys, the key path is the absolute path. B
 
 Restore the keys from the `etcd-dump.json` file.
 
+Restore now supports Strategy, you can restore some part of the dumpfile or the entire dump if you want to.
+
+  {
+    "backupStrategy":
+    {
+      "keys": ["/"],
+      "recursive": true
+    }
+  }
+
+Will Recursively restore all the keys inside `/`.
+
+  {
+    "backupStrategy":
+    {
+      "keys": ["/myKey"],
+      "recursive": true
+    }
+  }
+
+Will only restore the keys under `/myKey`.
+
 ### Command line options and default values
 
   `-config` Mandatory etcd-backup configuration file location, default value: "_backup-configuration.json_". See [Configuration section](#config) for more information.<br/>
