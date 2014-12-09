@@ -110,7 +110,7 @@ func NodesToBackupKeys(node *etcd.Node) []*BackupKey {
 }
 
 func DumpDataSet(dataSet []*BackupKey, dumpFilePath string) {
-	jsonDataSet, err := json.Marshal(dataSet)
+	jsonDataSet, err := json.MarshalIndent(dataSet, "", "  ")
 	if err != nil {
 		config.LogFatal("Error when trying to encode data set into json. Error: ", err)
 	}
