@@ -42,7 +42,7 @@ func ExecuteAction(action string, etcdClient EtcdClient) {
 		config.LogPrintln("Restoring dataSet in progress...")
 		RestoreDataSet(*dataSetLoad, config, etcdClient)
 	} else if action == "dump" {
-		dataSet := DownloadDataSet(&BackupStrategy{[]string{"/"}, true, true}, etcdClient)
+		dataSet := DownloadDataSet(config.BackupStrategy, etcdClient)
 		DumpDataSet(dataSet, config.DumpFilePath)
 	} else {
 		config.LogFatal("Error no default mode found. Got `" + action + "`. Try `restore` to restore or `dump` to persist data")
