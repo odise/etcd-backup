@@ -33,7 +33,7 @@ func (bacupKey *BackupKey) IsDirectory() (isDirectory bool) {
 
 func (bacupKey *BackupKey) IsExpired() (isExpired bool) {
 	if bacupKey.Expiration != nil {
-		bacupKey.TTL = int64(bacupKey.Expiration.Sub(time.Now().UTC()))
+		bacupKey.TTL = int64(bacupKey.Expiration.Sub(time.Now().UTC()).Seconds())
 		isExpired = bacupKey.TTL <= 0
 	}
 
