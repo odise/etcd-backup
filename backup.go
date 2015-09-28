@@ -115,7 +115,7 @@ func DumpDataSet(dataSet []*BackupKey, dumpFilePath string) {
 		config.LogFatal("Error when trying to encode data set into json. Error: ", err)
 	}
 
-	file, error := os.OpenFile(dumpFilePath, os.O_WRONLY|os.O_CREATE, 0666)
+	file, error := os.OpenFile(dumpFilePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
 	defer file.Close()
 	if error != nil {
 		config.LogFatal("Error when trying to open the file `"+dumpFilePath+"`. Error: ", error)
