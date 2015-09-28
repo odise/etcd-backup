@@ -27,9 +27,11 @@ func initializeClient(configFilePath string) *etcd.Client {
 		config.LogFatal("Error when trying to load the configuration file: `"+configFilePath+"`. Error: ", error)
 	}
 
-	success := etcdClient.SyncCluster()
-	if !success {
-		config.LogFatal("cannot sync machines")
+	if config.SyncCluster {
+		success := etcdClient.SyncCluster()
+		if !success {
+			config.LogFatal("cannot sync machines")
+		}
 	}
 
 	return etcdClient

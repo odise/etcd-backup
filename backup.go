@@ -33,7 +33,7 @@ func (bacupKey *BackupKey) IsDirectory() (isDirectory bool) {
 
 func (bacupKey *BackupKey) IsExpired() (isExpired bool) {
 	if bacupKey.Expiration != nil {
-		bacupKey.TTL = int64(bacupKey.Expiration.Sub(time.Now().UTC()))
+		bacupKey.TTL = int64(bacupKey.Expiration.Sub(time.Now().UTC()).Seconds())
 		isExpired = bacupKey.TTL <= 0
 	}
 
@@ -115,7 +115,7 @@ func DumpDataSet(dataSet []*BackupKey, dumpFilePath string) {
 		config.LogFatal("Error when trying to encode data set into json. Error: ", err)
 	}
 
-	file, error := os.OpenFile(dumpFilePath, os.O_WRONLY|os.O_CREATE, 0666)
+	file, error := os.OpenFile(dumpFilePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
 	defer file.Close()
 	if error != nil {
 		config.LogFatal("Error when trying to open the file `"+dumpFilePath+"`. Error: ", error)

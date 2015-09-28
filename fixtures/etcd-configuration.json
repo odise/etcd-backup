@@ -1,10 +1,8 @@
 {
   "cluster": {
-    "leader": "http://my-leader.com:4001/",
+    "leader": "http://127.0.0.1:2379",
     "machines": [
-      "http://my-follower1.com:4001/",
-      "http://my-follower2.com:4001/",
-      "http://my-follower3.com:4001/"
+      "http://127.0.0.1:2379"
     ]
   },
   "config": {

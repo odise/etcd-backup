@@ -14,6 +14,7 @@ type Config struct {
 	EtcdConfigPath     string          `json:"etcdConfigPath,omitempty"`
 	DumpFilePath       string          `json:"dumpFilePath,omitempty"`
 	BackupStrategy     *BackupStrategy `json:"backupStrategy,omitempty"`
+	SyncCluster        bool            `json:"syncCluster,omitempty"`
 	LogFatal           func(v ...interface{})
 	LogPrintln         func(v ...interface{})
 }
@@ -30,6 +31,7 @@ func (config *Config) ToString() string {
 	stringVersion += ", EtcdConfigPath: " + config.EtcdConfigPath
 	stringVersion += ", DumpFilePath: " + config.DumpFilePath
 	stringVersion += ", BackupStrategy: " + fmt.Sprintf("%#v", config.BackupStrategy)
+	stringVersion += ", SyncCluster: " + fmt.Sprintf("%#v", config.SyncCluster)
 
 	return stringVersion
 }
